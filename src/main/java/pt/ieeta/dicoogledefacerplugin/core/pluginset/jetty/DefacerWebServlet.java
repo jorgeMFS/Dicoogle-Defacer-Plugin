@@ -2,6 +2,12 @@ package pt.ieeta.dicoogledefacerplugin.core.pluginset.jetty;
 
 import net.jcores.utils.internal.io.FileUtils;
 import org.dcm4che2.io.DicomInputStream;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.util.InputStreamContentProvider;
+import org.eclipse.jetty.http.HttpMethod;
+import org.eclipse.jetty.http.HttpScheme;
+import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +31,7 @@ import javax.servlet.http.Part;
 
 import java.io.*;
 
+import java.net.URI;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
@@ -94,9 +101,6 @@ public class DefacerWebServlet extends HttpServlet implements PlatformCommunicat
              final String fileName = getFileName(filePart);
              OutputStream out = null;
              InputStream filecontent = null;
-
-
-             out = new FileOutputStream(new File(path + File.separator + fileName));
              filecontent = filePart.getInputStream();
 
              int read = 0;
@@ -104,22 +108,39 @@ public class DefacerWebServlet extends HttpServlet implements PlatformCommunicat
 
              while ((read = filecontent.read(bytes)) != -1) {
                  out.write(bytes, 0, read);
-             }
 
-         // Instantiate and configure the SslContextFactory
-         SslContextFactory sslContextFactory = new SslContextFactory();
-         // Instantiate HttpClient with the SslContextFactory
-         HttpClient httpClient = new HttpClient(sslContextFactory);
-         // Configure HttpClient:
-         httpClient.setFollowRedirects(false);
-         // Start HttpClient
-         httpClient.start();
+             // Instantiate and configure the SslContextFactory
+             SslContextFactory sslContextFactory = new SslContextFactory();
+             // Instantiate HttpClient with the SslContextFactory
+             HttpClient httpClient = new HttpClient(sslContextFactory);
+             // Configure HttpClient:
+             httpClient.setFollowRedirects(false);
+             // Start HttpClient
+             httpClient.start();
+             //Server:
+             URI server_URI  =new URI("http://127.0.0.1:5000/");
+
+             ContentResponse response = httpClient.newRequest(server_URI)
+                     .method(HttpMethod.POST)
+                     .content(new InputStreamContentProvider(filecontent))
+                     .send();
+
+
+             //out = new FileOutputStream(new File(path + File.separator + fileName));
+
+
+
+
+
          httpClient.stop();
+             }
+         }
+    }
 
-     }
+    public static void main(String [ ] args)){
+
     }
 }
-
 
 
 
