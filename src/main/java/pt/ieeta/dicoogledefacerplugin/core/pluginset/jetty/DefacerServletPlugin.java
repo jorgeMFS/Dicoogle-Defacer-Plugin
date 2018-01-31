@@ -84,18 +84,6 @@ public class DefacerServletPlugin implements JettyPluginInterface, PlatformCommu
 
     }
 
-    @Override
-    public HandlerList getJettyHandlers() {
-        ServletContextHandler handler = new ServletContextHandler();
-        handler.setContextPath("/Anon");
-        ServletHolder convertServletHolder = new ServletHolder(this.defaceWS);
-        convertServletHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(ANON_FILE_PATH));
-        handler.addServlet(convertServletHolder, "/Store");
-        HandlerList l = new HandlerList();
-        l.addHandler(handler);
-        return l;
-    }
-
     public DicooglePlatformInterface getPlatform() {
         return platform;
     }
@@ -104,5 +92,18 @@ public class DefacerServletPlugin implements JettyPluginInterface, PlatformCommu
         this.platform = platform;
     }
 
+    @Override
+    public HandlerList getJettyHandlers() {
 
+        ServletHolder convertServletHolder = new ServletHolder(this.defaceWS);
+        convertServletHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(ANON_FILE_PATH));
+
+        ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        handler.setContextPath("/defacer");
+        handler.addServlet(convertServletHolder, "/fileupload");
+        HandlerList handler_list = new HandlerList();
+        handler_list.addHandler(handler);
+        return handler_list;
+
+    }
 }

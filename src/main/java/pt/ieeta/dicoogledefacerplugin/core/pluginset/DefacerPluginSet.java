@@ -22,14 +22,12 @@ package pt.ieeta.dicoogledefacerplugin.core.pluginset;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import org.restlet.resource.ServerResource;
-import org.slf4j.LoggerFactory;
 import pt.ieeta.dicoogledefacerplugin.core.pluginset.jetty.DefacerServletPlugin;
 import pt.ua.dicoogle.sdk.*;
 import pt.ua.dicoogle.sdk.core.DicooglePlatformInterface;
 import pt.ua.dicoogle.sdk.core.PlatformCommunicatorInterface;
 import pt.ua.dicoogle.sdk.settings.ConfigurationHolder;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -54,11 +52,11 @@ public class DefacerPluginSet implements PluginSet, PlatformCommunicatorInterfac
 
 	@Override
 	public String getName() {
-		return "Anonymous-Wrapper-Plugin";
+		return "Defacer-Plugin";
 	}
 
-	private String location="/Anon_index/";
-	private DefacerServletPlugin jettyservlet = new DefacerServletPlugin();
+	private String location="/default/";
+	private DefacerServletPlugin jetty_servlet = new DefacerServletPlugin();
 
 
 	@Override
@@ -78,12 +76,12 @@ public class DefacerPluginSet implements PluginSet, PlatformCommunicatorInterfac
 
 	@Override
 	public Collection<JettyPluginInterface> getJettyPlugins() {
-		return Collections.singleton(this.jettyservlet);
+		return Collections.singleton(this.jetty_servlet);
 	}
 
 	@Override
 	public Collection<QueryInterface> getQueryPlugins() {
-        return Collections.emptyList();	}
+        return Collections.emptyList();}
 
 	@Override
 	public Collection<ServerResource> getRestPlugins() {
@@ -97,7 +95,7 @@ public class DefacerPluginSet implements PluginSet, PlatformCommunicatorInterfac
 
 	@Override
 	public void setSettings(ConfigurationHolder arg0) {
-		this.setLocation(arg0.getConfiguration().getString("Location","./Anon_index/"));
+		this.setLocation(arg0.getConfiguration().getString("Location","./default/"));
 		this.settings =arg0;
 	}
 
@@ -105,15 +103,10 @@ public class DefacerPluginSet implements PluginSet, PlatformCommunicatorInterfac
 	public void shutdown() {
 	}
 
-	public String getLocation() {
-		return location;
-	}
 
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-
 
 
 }
