@@ -10,7 +10,7 @@ Before building, please make sure that your system contains the following tools:
 - Maven 3
 
 ### Instructions
- 1. Retrieve the full source code from this repository: `https://github.com/jorgeMFS/AnonymousWrapper.git`
+ 1. Retrieve the full source code from this repository: `https://github.com/jorgeMFS/Dicoogle-Defacer-Plugin.git`
  2. Navigate to the project's base directory, and build the parent Maven project by calling `mvn install`
  
  
